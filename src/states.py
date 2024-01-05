@@ -1,4 +1,5 @@
 from Levenshtein import distance
+import sys
 
 
 def main():
@@ -17,7 +18,8 @@ def main():
     points = 0
     done = []
     almosts = []
-    while True:
+    guesses = []
+    while points < 50:
         answer = input("Enter the name of a US state: ")
         if answer == "":
             print("See you next time!")
@@ -46,28 +48,37 @@ def main():
             if lowest < 3:
                 points += 0.5
                 print("Almost correct! You have {} points.".format(points))
-                almosts.append(lowest_state)    
+                almosts.append(lowest_state)
+                guesses.append(answer)    
             else:
                 points -= 1
                 print("Incorrect! You have {} points after being punished with"\
                       +" a negative point.".format(points))
-    print("You got {} points so far.".format(points))
-    print("Let's see if you can solve the almosts!")
-    for almost in almosts:
+    else:
+        print("Congratulations! You got all the states!")
+        sys.exit()
+    if almosts:
+        print("You got {} points so far.".format(points))
+        print("Let's see if you can solve the almosts!")
+    for guess in guesses:
         answer = input("What state did you mean by {}? ".format(almost))
-        if answer in states and answer not in done:
+        if answer in almosts:
             points += 0.25
-            print("Correct! You have {} points.".format(points))
+            print("You have redeemed one answer! You have {} points.".format(points))
             done.append(answer)
+            almosts.remove(answer)
         else:
-            print("Incorrect! You have {} points.".format(points))
+            if answer in states:
+                print("You have already entered that state.")
+            else:
+                print("Incorrect! You have {} points.".format(points))
     print("You got {} points in total.".format(points))
     if done:
-        print("The states you got are: {}".format(*done))
+        print("The states you got are:", *done)
     if almosts:
-        print("The states you almost got are: {}".format(*almosts))
+        print("The states you almost got are:", *almosts)
     if len(done)<50:
-        print("The states you missed are: {}".format(*list(set(states) - set(done))))
+        print("The states you missed are:", *list(set(states) - set(done)))
 
 
 if __name__ == '__main__':
