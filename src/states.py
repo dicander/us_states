@@ -24,6 +24,16 @@ def main():
         if answer == "":
             print("See you next time!")
             break
+        elif answer == "Help":
+            first_letters = dict()
+            remaining = list(set(states) - set(done))
+            for x in sorted(remaining):
+                if x[0] not in first_letters:
+                    first_letters[x[0]] = [x]
+                else:
+                    first_letters[x[0]].append(x)
+            for x in sorted(first_letters):
+                print(x, "is the first letter in", len(first_letters[x]), "remaining states.")
         elif answer in done:
             print("You have already entered that state.")
         elif answer in states:
@@ -61,7 +71,7 @@ def main():
         print("You got {} points so far.".format(points))
         print("Let's see if you can solve the almosts!")
     for guess in guesses:
-        answer = input("What state did you mean by {}? ".format(almost))
+        answer = input("What state did you mean by {}? ".format(guess))
         if answer in almosts:
             points += 0.25
             print("You have redeemed one answer! You have {} points.".format(points))
